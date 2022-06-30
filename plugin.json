@@ -1,0 +1,10 @@
+{
+    "name": "Mpesa Payment Gateway",
+    "namespace": "Snobole\\Mpesa\\",
+    "provider": "Snobole\\Mpesa\\Providers\\MpesaServiceProvider",
+    "author": "Snobole Software Limited",
+    "url": "https://snobole.com",
+    "version": "1.0",
+    "description": "Mpesa payment gateway integration",
+    "require": ["payment"]
+}

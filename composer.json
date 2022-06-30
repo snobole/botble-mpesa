@@ -1,0 +1,8 @@
+{
+    "name": "snobole/botble-mpesa",
+    "description": "Mpesa",
+    "type": "package",
+    "require": {
+        "propaganistas/laravel-phone": "^4.2.7"
+    }
+}
