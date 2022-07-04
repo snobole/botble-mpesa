@@ -32,7 +32,7 @@
                 </div>
             @endif
             <div class="row mt-3">
-                <div class="col-sm-6 col-12">
+                <div id="stk-push-payment-form" class="col-sm-6 col-12">
                     <div class="form-group mb-3">
                         <input id="stk_push_phone" type="text" class="form-control address-control-item address-control-item-required checkout-input" placeholder="+2547000000" name="phone">
                     </div>
@@ -40,6 +40,11 @@
                         <button type="button" class="btn stk-push-btn btn-info text-white" data-processing-text="Processing. Please wait..." data-error-header="Error" style="padding: 10px 20px;">
                             Pay
                         </button>
+                    </div>
+                </div>
+                <div id="stk-push-payment-status-box" style="display:none" class="col-sm-6 col-12 mb-3">
+                    <div class="p-3 bg-info text-white rounded">
+                        Your payment request has been received and is being processed. Your order will be updated as soon as the payment is received.
                     </div>
                 </div>
             </div>
@@ -70,7 +75,7 @@
                     success: function(result,status,xhr) {
                         $('#merchant_request_id').val(result.message.MerchantRequestID)
                         $('#checkout_request_id').val(result.message.CheckoutRequestID)
-
+                        checkPaymentStatus()
                         if (typeof Botble != 'undefined') {
                             Botble.showSuccess(result, 'Success');
                         }
@@ -80,6 +85,7 @@
                         if (typeof Botble != 'undefined') {
                             Botble.showError(error, _self.data('error-header'));
                         }
+                        checkPaymentStatus()
                     },
                 }).done(function( msg ) {
                     _self.removeAttr('disabled');
@@ -93,6 +99,41 @@
                 let form = _self.closest('form');
                 form.submit();
             });
+
+            //Check for transaction status
+            (function poll() {
+                setTimeout(function() {
+                    $.ajax({
+                        url: `/api/payment/stk-push/{{request()->token}}/show`,
+                        type: "GET",
+                        success: function(response) {
+                            if(response.data) {
+                                $('#merchant_request_id').val(response.data.merchant_request_id)
+                                $('#checkout_request_id').val(response.data.checkout_request_id)
+
+                                checkPaymentStatus()
+                            }
+
+                        },
+                        error: function(xhr,status,error) {
+                            checkPaymentStatus()
+                        },
+                        dataType: "json",
+                        complete: poll,
+                        timeout: 5000
+                    })
+                }, 10000);
+            })();
+
+            function checkPaymentStatus() {
+                if($('#merchant_request_id').val() && $('#checkout_request_id').val()) {
+                    $('#stk-push-payment-form').hide()
+                    $('#stk-push-payment-status-box').show()
+                } else {
+                    $('#stk-push-payment-form').show()
+                    $('#stk-push-payment-status-box').hide()
+                }
+            }
         });
     </script>
 @endif

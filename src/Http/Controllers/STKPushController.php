@@ -9,6 +9,7 @@ use Snobole\Mpesa\Http\Requests\MpesaSTKPushSimulateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Snobole\Mpesa\Apis\STKPush;
+use Snobole\Mpesa\Models\MpesaSTKPush;
 use function config;
 use function response;
 use function route;
@@ -95,6 +96,21 @@ class STKPushController extends Controller
         return response()->json([
             'ResultCode' => $this->result_code,
             'ResultDesc' => $this->result_desc,
+        ]);
+    }
+
+    public function show(Request $request, $token) {
+        if ($stk_push = MpesaSTKPush::where(['account_reference' => $token,])->first()) {
+            return response()->json([
+                'data' => [
+                    'merchant_request_id' => $stk_push->merchant_request_id,
+                    'checkout_request_id' => $stk_push->checkout_request_id,
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'data' => []
         ]);
     }
 }

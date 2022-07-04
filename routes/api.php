@@ -25,6 +25,7 @@ Route::group(['prefix' => 'api/payment', 'as' => 'api.mpesa.', 'namespace' => 'S
 
     Route::group(['prefix' => 'stk-push', 'as' => 'stk-push.'], function () {
         Route::post('simulate', 'STKPushController@simulate')->name('simulate');
+        Route::get('{token}/show', 'STKPushController@show')->name('show');
         Route::post('confirm/{confirmation_key}', 'STKPushController@confirm')->name('confirm');
     });
 });
