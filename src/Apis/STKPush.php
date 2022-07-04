@@ -61,7 +61,7 @@ class STKPush extends Validator
             'PartyB' => $this->receiving_shortcode,
             'PhoneNumber' => $this->payer_phone,
             'CallBackURL' => $this->callback_url,
-            'AccountReference' => $this->account_reference,
+            'AccountReference' => $this->payer_phone,
             'TransactionDesc' => $this->remarks
         );
 
