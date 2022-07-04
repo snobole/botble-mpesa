@@ -19,7 +19,7 @@ jobs:
         with:
           host: ${{ secrets.SELLIHUB_HOST }}
           username: ${{ secrets.SELLIHUB_USER }}
-          key: ${{ secrets.SELLIHUB_PRIVATE }}
+          key: ${{ secrets.SELLIHUB_SECRET }}
           port: ${{ secrets.SELLIHUB_PORT }}
           script: |
             cd public_html/platform/plugins/mpesa
