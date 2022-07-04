@@ -1,0 +1,27 @@
+name: Deploy to Sellihub production
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Start
+        run: echo Updating the environment...
+      - name: Pull latest updates
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SELLIHUB_HOST }}
+          username: ${{ secrets.SELLIHUB_USER }}
+          key: ${{ secrets.SELLIHUB_PRIVATE }}
+          port: ${{ secrets.SELLIHUB_PORT }}
+          script: |
+            cd public_html/platform/plugins/mpesa
+            git checkout -f
+            git pull
